@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,12 +15,12 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const navItems = [
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' },
+    { name: 'Collection', path: '/collection' },
+    { name: 'Contact', path: '/contact' }
+  ];
 
   return (
     <motion.nav
@@ -34,19 +36,26 @@ export default function Navigation() {
             whileHover={{ scale: 1.05 }}
             className="text-2xl font-light tracking-wider"
           >
-            SERENA VENTUS
+            <Link to="/">SERENA VENTUS</Link>
           </motion.div>
           
           <div className="hidden md:flex space-x-8">
-            {['Home', 'About', 'Collection', 'Contact'].map((item, index) => (
-              <motion.button
-                key={item}
+            {navItems.map((item) => (
+              <motion.div
+                key={item.name}
                 whileHover={{ y: -2 }}
-                onClick={() => scrollToSection(item.toLowerCase())}
-                className="text-sm font-light tracking-wide hover:text-white/70 transition-colors"
               >
-                {item}
-              </motion.button>
+                <Link
+                  to={item.path}
+                  className={`text-sm font-light tracking-wide transition-colors ${
+                    location.pathname === item.path 
+                      ? 'text-white border-b border-white/30' 
+                      : 'text-white/80 hover:text-white'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              </motion.div>
             ))}
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Hero() {
   const scrollToAbout = () => {
@@ -63,18 +64,23 @@ export default function Hero() {
           Where elegance meets essence. Discover fragrances that capture the whispers of wind and the serenity of nature.
         </motion.p>
         
-        <motion.button
+        <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 1.5 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={scrollToAbout}
-          className="group relative px-8 py-3 border border-white/30 hover:border-white/60 transition-all duration-300 backdrop-blur-sm"
+          className="space-x-4"
         >
-          <span className="text-sm font-light tracking-widest">EXPLORE COLLECTION</span>
-          <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        </motion.button>
+          <Link to="/collection">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="group relative px-8 py-3 border border-white/30 hover:border-white/60 transition-all duration-300 backdrop-blur-sm"
+            >
+              <span className="text-sm font-light tracking-widest">EXPLORE COLLECTION</span>
+              <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </motion.button>
+          </Link>
+        </motion.div>
       </div>
 
       <motion.div
