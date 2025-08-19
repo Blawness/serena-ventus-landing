@@ -4,8 +4,11 @@ import { useRef, useState } from 'react';
 import { Mail, MapPin, Phone, Clock, Send } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import PageHeader from '../components/PageHeader';
+import CMSContent from '../components/CMSContent';
+import { usePage } from '../hooks/useCMS';
 
 export default function ContactPage() {
+  const { page, loading } = usePage('contact');
   const contactRef = useRef(null);
   const isContactInView = useInView(contactRef, { once: true, margin: "-100px" });
   
@@ -29,13 +32,24 @@ export default function ContactPage() {
     console.log('Form submitted:', formData);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#141414] text-white">
+        <Navigation />
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-pulse text-white/60">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#141414] text-white">
       <Navigation />
       
       <PageHeader 
-        title="CONTACT" 
-        subtitle="Connect with us for personalized consultations and exclusive experiences"
+        title={page?.title || "CONTACT"} 
+        subtitle={page?.subtitle || "Connect with us for personalized consultations and exclusive experiences"}
       />
 
       <section ref={contactRef} className="py-32 px-6">
@@ -48,16 +62,10 @@ export default function ContactPage() {
               transition={{ duration: 0.8 }}
               className="space-y-12"
             >
-              <div>
-                <h2 className="text-3xl md:text-4xl font-extralight tracking-wider mb-8">
-                  GET IN TOUCH
-                </h2>
-                <p className="text-white/70 font-light leading-relaxed">
-                  Whether you're seeking a signature scent, have questions about our collection, 
-                  or wish to schedule a private consultation, we're here to guide you on your 
-                  olfactory journey.
-                </p>
-              </div>
+              {/* CMS Content */}
+              {page?.content && (
+                <CMSContent content={page.content} />
+              )}
 
               <div className="space-y-8">
                 <div className="flex items-start space-x-4">

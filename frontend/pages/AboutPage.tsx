@@ -3,8 +3,11 @@ import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import Navigation from '../components/Navigation';
 import PageHeader from '../components/PageHeader';
+import CMSContent from '../components/CMSContent';
+import { usePage } from '../hooks/useCMS';
 
 export default function AboutPage() {
+  const { page, loading } = usePage('about');
   const storyRef = useRef(null);
   const valuesRef = useRef(null);
   const craftRef = useRef(null);
@@ -13,14 +16,30 @@ export default function AboutPage() {
   const isValuesInView = useInView(valuesRef, { once: true, margin: "-100px" });
   const isCraftInView = useInView(craftRef, { once: true, margin: "-100px" });
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#141414] text-white">
+        <Navigation />
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-pulse text-white/60">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#141414] text-white">
       <Navigation />
       
       <PageHeader 
-        title="ABOUT" 
-        subtitle="Discover the story behind Serena Ventus and our commitment to olfactory excellence"
+        title={page?.title || "ABOUT"} 
+        subtitle={page?.subtitle || "Discover the story behind Serena Ventus and our commitment to olfactory excellence"}
       />
+
+      {/* CMS Content */}
+      {page?.content && (
+        <CMSContent content={page.content} />
+      )}
 
       {/* Our Story */}
       <section ref={storyRef} className="py-32 px-6">
